@@ -9922,6 +9922,8 @@ in
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
+  isso = pythonPackages.isso;
+
   jboss = callPackage ../servers/http/jboss { };
 
   jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
