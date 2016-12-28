@@ -17362,6 +17362,7 @@ in
       })
     nix
     nixStable
+    nixIPFS
     nixUnstable;
 
   nixops = callPackage ../tools/package-management/nixops { };
