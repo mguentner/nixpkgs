@@ -128,8 +128,8 @@ in rec {
     src = fetchFromGitHub {
       owner = "mguentner";
       repo = "nix";
-      rev = "9b062532df288cc473b2f3a9955c5da5d18543b6";
-      sha256 = "0shgb9vxxqdqizb1si6xq8b2svkdnj92zi4rcxa6my6p85xlp97j";
+      rev = "0880000201679a650fb1c5bc5151a50ff9a4b583";
+      sha256 = "17wpnirz3mkphcbv5vpn0csd4vryhclcb6pg71wl6g3nbqgcg6vk";
     };
     fromGit = true;
   });
