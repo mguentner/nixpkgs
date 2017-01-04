@@ -11,6 +11,9 @@ import ./make-test.nix ({ pkgs, ...} : {
       virtualisation.memorySize = 768;
       services.gitlab.enable = true;
       services.gitlab.databasePassword = "gitlab";
+      services.gitlab.secrets.secret = "itaew3lai5EeLiob8ute";
+      services.gitlab.secrets.db     = "itaew3lai5EeLiob8ute";
+      services.gitlab.secrets.otp    = "itaew3lai5EeLiob8ute";
       systemd.services.gitlab.serviceConfig.TimeoutStartSec = "10min";
     };
   };
