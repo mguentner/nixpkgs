@@ -1,3 +1,6 @@
+{ workingDirectory, socketLocation, pidLocation, workerProcesses }:
+let
+  cfg = ''
 # The following was taken from github.com/crohr/syslogger and is BSD
 # licensed.
 require 'syslog'
@@ -164,7 +167,7 @@ class Syslogger
     message.strip! # remove whitespace
     message.gsub!(/\n/, '\\n') # escape newlines
     message.gsub!(/%/, '%%') # syslog(3) freaks on % (printf)
-    message.gsub!(/\e\[[^m]*m/, '') # remove useless ansi color codes
+    message.gsub!(/\e\[[^m]*m/, ''') # remove useless ansi color codes
     message
   end
 
@@ -182,11 +185,11 @@ class Syslogger
   end
 end
 
-worker_processes 2
-working_directory ENV["GITLAB_PATH"]
-pid ENV["UNICORN_PATH"] + "/tmp/pids/unicorn.pid"
+worker_processes ${toString workerProcesses}
+working_directory "${workingDirectory}"
+pid "${pidLocation}"
 
-listen ENV["UNICORN_PATH"] + "/tmp/sockets/gitlab.socket", :backlog => 1024
+listen "${socketLocation}", :backlog => 1024
 
 timeout 60
 
@@ -203,3 +206,7 @@ after_fork do |server, worker|
   defined?(ActiveRecord::Base) and
     ActiveRecord::Base.establish_connection
 end
+'';
+in {
+  cfg=cfg;
+}

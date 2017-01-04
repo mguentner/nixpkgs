@@ -111,7 +111,12 @@ let
     RAILS_ENV = "production";
   };
 
-  unicornConfig = builtins.readFile ./defaultUnicornConfig.rb;
+  unicornConfig = (import ./unicorn-config.nix {
+    workingDirectory = "${cfg.packages.gitlab}/share/gitlab/";
+    socketLocation   = "${cfg.statePath}/tmp/sockets/gitlab.socket";
+    pidLocation      = "${cfg.statePath}/tmp/pids/unicorn.pid";
+    workerProcesses  = 2;
+  }).cfg;
 
   gitlab-rake = pkgs.stdenv.mkDerivation rec {
     name = "gitlab-rake";
