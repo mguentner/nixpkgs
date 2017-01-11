@@ -1907,6 +1907,23 @@ in {
     };
   };
 
+  base32hex = buildPythonPackage rec {
+    name = "base32hex-${version}";
+    version = "1.0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/base32hex/${name}.tar.gz";
+      sha256 = "1w8vb57xb9n8cd030ymblyn6d1z06ql4gy62a4j20wdb7610ixdp";
+    };
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/base32hex;
+      description = "Python RFC 4648 base32hex implementation";
+      license = licenses.mit;
+      maintainers = with maintainers; [ mguentner ];
+    };
+  };
+
   basiciw = buildPythonPackage rec {
     name = "${pname}-${version}";
     version = "0.2.2";
