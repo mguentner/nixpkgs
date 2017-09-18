@@ -185,7 +185,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ wrapped ];
-    environment.etc."fuse.conf".text = mkIf cfg.autoMount "user_allow_other";
+    environment.etc."fuse.conf" = mkIf cfg.autoMount { text = "user_allow_other"; };
 
     users.extraUsers = mkIf (cfg.user == "ipfs") {
       ipfs = {
