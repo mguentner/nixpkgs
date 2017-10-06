@@ -12,6 +12,8 @@ rec {
   rustc = callPackage ./rustc.nix {
     inherit llvm targets targetPatches targetToolchains rustPlatform version;
 
+    forceBundledLLVM = true;
+
     configureFlags = [ "--release-channel=stable" ];
 
     src = fetchurl {
