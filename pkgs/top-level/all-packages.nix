@@ -3435,6 +3435,8 @@ in
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
+  pgloader = callPackage ../development/tools/pgloader { };
+
   pigz = callPackage ../tools/compression/pigz { };
 
   pixz = callPackage ../tools/compression/pixz { };
@@ -4879,7 +4881,7 @@ in
 
   ola = callPackage ../applications/misc/ola { };
 
-  olive-editor = libsForQt5.callPackage ../applications/video/olive-editor { 
+  olive-editor = libsForQt5.callPackage ../applications/video/olive-editor {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 

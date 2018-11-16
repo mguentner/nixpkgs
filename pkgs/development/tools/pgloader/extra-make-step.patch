@@ -1,0 +1,15 @@
+--- a/Makefile	2018-11-07 14:55:55.777167335 +0100
++++ b/Makefile	2018-11-07 15:25:51.396486278 +0100
+@@ -131,6 +131,12 @@
+ 
+ buildapp: $(BUILDAPP) ;
+ 
++fetch_buildapp:
++	$(CL) $(CL_OPTS) --load $(QLDIR)/setup.lisp                        \
++						--eval '(push "$(PWD)/" ql:*local-project-directories*)' \
++						--eval '(ql:quickload "buildapp")'                       \
++						--eval '(quit)'
++
+ $(PGLOADER): $(MANIFEST) $(BUILDAPP) $(LISP_SRC)
+ 	mkdir -p $(BUILDDIR)/bin
+ 	$(BUILDAPP)      --logfile /tmp/build.log                \
