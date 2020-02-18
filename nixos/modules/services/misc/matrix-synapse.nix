@@ -673,7 +673,9 @@ in {
 
     services.postgresql = mkIf (usePostgresql && cfg.create_local_database) {
       enable = mkDefault true;
-      ensureDatabases = [ cfg.database_name ];
+      ensureDatabases = [
+        { name = cfg.database_name; lc_ctype = "C"; lc_collate = "C"; }
+      ];
       ensureUsers = [{
         name = cfg.database_user;
         ensurePermissions = { "DATABASE \"${cfg.database_name}\"" = "ALL PRIVILEGES"; };

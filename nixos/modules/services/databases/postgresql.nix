@@ -97,7 +97,34 @@ in
       };
 
       ensureDatabases = mkOption {
-        type = types.listOf types.str;
+        type = with types; listOf (either str (submodule {
+          options = {
+            name = mkOption {
+              type = types.str;
+              description = ''
+                Name of the database to create.
+              '';
+            };
+            lc_collate = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "C";
+              description = ''
+                String sort order.
+                (See also <link xlink:href="https://www.postgresql.org/docs/12/locale.html">https://www.postgresql.org/docs/12/locale.html</link>).
+              '';
+            };
+            lc_ctype = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "C";
+              description = ''
+                Character classification (What is a letter? Its upper-case equivalent?).
+                (See also <link xlink:href="https://www.postgresql.org/docs/12/locale.html">https://www.postgresql.org/docs/12/locale.html</link>).
+              '';
+            };
+          };
+        }));
         default = [];
         description = ''
           Ensures that the specified databases exist.
@@ -108,6 +135,10 @@ in
         example = [
           "gitea"
           "nextcloud"
+          { name = "matrix-synapse";
+            lc_collate = "C";
+            lc_ctype = "C";
+          }
         ];
       };
 
@@ -318,6 +349,15 @@ in
 
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
+          let
+            databaseStr = db: if isAttrs db then db.name else db;
+            extraCfg = db: if isAttrs db
+              then
+                optionalString (db.lc_collate != null) " LC_COLLATE=\"${db.lc_collate}\""
+                + optionalString (db.lc_ctype != null) " LC_CTYPE=\"${db.lc_ctype}\""
+                + optionalString (db.lc_collate != null || db.lc_ctype != null) " template=template0"
+              else "";
+          in
           ''
             PSQL="${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql --port=${toString cfg.port}"
 
@@ -333,8 +373,8 @@ in
               rm -f "${cfg.dataDir}/.first_startup"
             fi
           '' + optionalString (cfg.ensureDatabases != []) ''
-            ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
+            ${concatMapStrings (database: let name = databaseStr database; in ''
+              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${name}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${name}" ${extraCfg database}'
             '') cfg.ensureDatabases}
           '' + ''
             ${concatMapStrings (user: ''
