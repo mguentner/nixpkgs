@@ -25,16 +25,17 @@
 , qtwebengine
 , libXcomposite
 , bluez
+, unstableGitUpdater
 }:
 
 let
-  version = "5.0.10";
+  version = "6.0.5231";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
-    rev = "v${version}";
-    hash = "sha256-KzUBhFGvocaS1VrVT2stvKrj3uVxYka+dyYZUfkIoNs=";
+    rev = "a905a781784e46972ba7df0f3d06e34391802d68";
+    hash = "sha256-KTQdznaR6SNkFlBquUY8oipheCaG3DmR35l5YtIJlxE=";
     fetchSubmodules = true;
   });
 
@@ -136,7 +137,9 @@ stdenv.mkDerivation {
     "-DNO_PRINTING=OFF"
   ];
 
-  passthru = { inherit version libdc googlemaps; };
+  passthru = {
+    inherit version libdc googlemaps;
+  };
 
   meta = with lib; {
     description = "Divelog program";
